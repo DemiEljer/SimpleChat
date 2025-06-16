@@ -48,21 +48,27 @@ namespace SimpleChat.Network
 
         public (CustomTCPServerClient client, string name) RemoveClient(CustomTCPServerClient client)
         {
-            var _client = _ClientsCollection.FirstOrDefault(u => u.client == client);
-
-            if (_client.client != null)
+            lock (_LockObject)
             {
-                _ClientsCollection.Remove(_client);
-            }
+                var _client = _ClientsCollection.FirstOrDefault(u => u.client == client);
 
-            return _client;
+                if (_client.client != null)
+                {
+                    _ClientsCollection.Remove(_client);
+                }
+
+                return _client;
+            }
         }
 
         public CustomTCPServerClient? GetClientByName(string? name)
         {
-            var client = _ClientsCollection.FirstOrDefault(u => u.name == name);
+            lock (_LockObject)
+            {
+                var client = _ClientsCollection.FirstOrDefault(u => u.name == name);
 
-            return client.client;
+                return client.client;
+            }
         }
 
         internal void Clear()
