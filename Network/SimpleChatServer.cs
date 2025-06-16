@@ -95,9 +95,7 @@ namespace SimpleChat.Network
             if (Server.EndPoint is not null
                 && !Server.IsActive)
             {
-                Server.Start();
-
-                return true;
+                return Server.Start();
             }
             else
             {

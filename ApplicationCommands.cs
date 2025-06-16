@@ -292,7 +292,7 @@ namespace SimpleChat
 
                      if (app.Server.SetEndPoint(GetEndPoint(args[0])))
                      {
-                         ConsoleHandler.AppendOutputContent($"> Конечная точка сервера установлена: {app.Client.Client.EndPoint}.");
+                         ConsoleHandler.AppendOutputContent($"> Конечная точка сервера установлена: {app.Server.Server.EndPoint}.");
                      }
                      else
                      {

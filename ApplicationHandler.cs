@@ -83,6 +83,11 @@ namespace SimpleChat
                 _ShowMessage($"Клиент был отключен от сервера");
             };
 
+            Client.StartingErrorEvent += () =>
+            {
+                _ShowMessage($"Произошла ошибка запуска клиента");
+            };
+
             Client.ClientsListReceiveEven += (clients) =>
             {
                 StringBuilder sb = new();
@@ -102,6 +107,11 @@ namespace SimpleChat
             Client.MessageIsReceivedEvent += (from, content) =>
             {
                 _ShowMessage($"Принято от \"{from}\": \"{content}\"");
+            };
+
+            Server.StartingErrorEvent += () =>
+            {
+                _ShowMessage($"Произошла ошибка запуска сервера");
             };
 
             Server.ClientHasConnectedEvent += (client) =>
