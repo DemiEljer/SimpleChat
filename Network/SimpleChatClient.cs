@@ -4,6 +4,7 @@ using SimpleChat.Network.Frames;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,7 +18,9 @@ namespace SimpleChat.Network
 
         public event Action? StartingErrorEvent;
 
-        public event Action<string, string>? MessageReceiveEvent;
+        public event Action<string, string>? MessageIsReceivedEvent;
+
+        public event Action<string, string>? MessageIsSentEvent;
 
         public event Action<string[]>? ClientsListReceiveEven;
 
@@ -41,7 +44,7 @@ namespace SimpleChat.Network
                             && _frame.ClientFrom is not null
                             && _frame.MessageContent is not null)
                         {
-                            MessageReceiveEvent?.Invoke(_frame.ClientFrom, _frame.MessageContent);
+                            MessageIsReceivedEvent?.Invoke(_frame.ClientFrom, _frame.MessageContent);
                         }
                     }
                     else if (frameObject is ClientsListFrame)
@@ -108,7 +111,14 @@ namespace SimpleChat.Network
 
         public bool SendMessage(string toUser, string content)
         {
-            return Client.TransmitData(SimpleChatFramesFabric.CreateMessageFrame(UserName, toUser, content));
+            var result = Client.TransmitData(SimpleChatFramesFabric.CreateMessageFrame(UserName, toUser, content));
+
+            if (result)
+            {
+                MessageIsSentEvent?.Invoke(toUser, content);
+            }
+
+            return result;
         }
 
         public bool SetEndPoint(NetEndPoint? endPoint)

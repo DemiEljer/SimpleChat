@@ -1,4 +1,4 @@
-﻿using SimpleChat.Commands;
+using SimpleChat.Commands;
 using SimpleChat.ConsoleHandlers;
 using SimpleChat.Network;
 using System;
@@ -94,9 +94,14 @@ namespace SimpleChat
                 _ShowMessage(sb.ToString());
             };
 
-            Client.MessageReceiveEvent += (from, content) =>
+            Client.MessageIsSentEvent += (to, content) =>
             {
-                _ShowMessage($"От \"{from}\": \"{content}\"");
+                _ShowMessage($"Отправлено для \"{to}\": \"{content}\"");
+            };
+
+            Client.MessageIsReceivedEvent += (from, content) =>
+            {
+                _ShowMessage($"Принято от \"{from}\": \"{content}\"");
             };
 
             Server.ClientHasConnectedEvent += (client) =>
